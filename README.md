@@ -1,4 +1,4 @@
-Huffman-Codes
+Huffman Codes
 =============
 
 Author: Jayden Navarro
