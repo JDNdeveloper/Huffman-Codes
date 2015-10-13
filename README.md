@@ -16,5 +16,8 @@ Huffman Codes
 **Website:** [jdndeveloper.com](http://www.jdndeveloper.com/)
 
 ## Description:
-Provides Huffman Coder and Decoder written in Java. To run just compile HuffmanCodesMain.java. Inside of 
-HuffmanCodesMain.java you can change the text to be encoded.
+Provides Huffman Coder and Decoder written in Java and Python. To run the Java code, just 
+compile src/HuffmanCodesMain.java. Inside of src/HuffmanCodesMain.java you can change the 
+text to be encoded. 
+
+To run the Python code, execute src/HuffmanCodes.py.
