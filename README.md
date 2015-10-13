@@ -17,7 +17,7 @@ Huffman Codes
 
 ## Description:
 Provides Huffman Coder and Decoder written in Java and Python. To run the Java code, just 
-compile and run `src/HuffmanCodesMain.java`. Inside of `src/HuffmanCodesMain.java` you can 
+compile and run `src/Java/HuffmanCodesMain.java`. Inside of `src/Java/HuffmanCodesMain.java` you can 
 change the text to be encoded. 
 
-To run the Python code, execute `src/HuffmanCodes.py`.
+To run the Python code, execute `src/Python/HuffmanCodes.py`.
