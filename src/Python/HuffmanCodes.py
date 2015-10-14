@@ -13,19 +13,24 @@ class HuffmanCodes:
 	def __init__(self):
 		self._clear()
 
-	def getBitString(self):
+	@property
+	def bitString(self):
 		return self._bitString
 
-	def getString(self):
+	@property
+	def string(self):
 		return self._string
 
-	def getCharToBitsMap(self):
-		return self._cTbMap
+	@property
+	def charToBitsMap(self):
+		return self._cMap
 
-	def getBitsToCharMap(self):
-		return self._bTcMap
+	@property
+	def bitsToCharMap(self):
+		return {v: k for k, v in self._cMap.items()}
 
-	def getFreqMap(self):
+	@property
+	def freqMap(self):
 		return self._freqMap
 
 	def traverseTree(self):
@@ -38,17 +43,16 @@ class HuffmanCodes:
 		if len(self._string) < 1:
 			print("ERROR: No string provided")
 			return
-
 		self._calcFreq()
 		self._buildTree()
 		self._buildMap()
 		self._buildBitString()
 		return self._bitString
 
-	def decode(self, bitString, bTcMap):
+	def decode(self, bitString, cMap):
 		self._clear()
 		self._bitString = bitString
-		self._bTcMap = bTcMap
+		self._cMap = cMap
 
 		self._decode()
 		return self._string
@@ -62,8 +66,7 @@ class HuffmanCodes:
 			self._traverseTree(node.right)
 
 	def _clear(self):
-		self._cTbMap = {}
-		self._bTcMap = {}
+		self._cMap = {}
 		self._freqMap = {}
 		self._tree = []
 		self._string = ""
@@ -71,10 +74,11 @@ class HuffmanCodes:
 
 	def _decode(self):
 		bitSubString = ""
+		bTcMap = self.bitsToCharMap
 		for char in self._bitString:
 			bitSubString += char
-			if bitSubString in self._bTcMap.keys():
-				self._string += self._bTcMap[bitSubString]
+			if bitSubString in bTcMap.keys():
+				self._string += bTcMap[bitSubString]
 				bitSubString = ""
 
 	def _calcFreq(self):
@@ -91,71 +95,59 @@ class HuffmanCodes:
 			temp.freq = freq
 			self._tree.append(temp)
 		while len(self._tree) > 1:
-			a, b = self._getTwoSmallestNodes()
+			a = self._getSmallestNode()
+			self._tree.remove(a)
+			b = self._getSmallestNode()
+			self._tree.remove(b)
 			combined = self.Node()
 			combined.chars.extend(a.chars)
 			combined.chars.extend(b.chars)
 			combined.freq = a.freq + b.freq
 			combined.left = b
 			combined.right = a
-			self._tree.remove(a)
-			self._tree.remove(b)
 			self._tree.append(combined)
 
-	# a.freq <= b.freq
-	def _getTwoSmallestNodes(self):
-		a = None
-		b = None
+	def _getSmallestNode(self):
+		smallNode = None
 		for node in self._tree:
-			if a == None:
-				a = node
-			elif b == None:
-				if node.freq < a.freq:
-					b = a
-					a = node
-				else:
-					b = node
+			if smallNode == None:
+				smallNode = node
 			else:
-				if node.freq < a.freq:
-					b = a
-					a = node
-				elif node.freq < b.freq:
-					b = node
-		return (a, b)
+				if node.freq < smallNode.freq:
+					smallNode = node
+		return smallNode
 
 	def _buildMap(self):
 		if len(self._tree) != 1: 
 			return
 		self._buildMapRecursive(self._tree[0])
-		# reverse the mapping from chars to bitString, to bitString to Chars
-		self._bTcMap = {v: k for k, v in self._cTbMap.items()}
 
 	def _buildMapRecursive(self, node):
 		if node.left == None or node.right == None:
 			return
 		for char in node.left.chars:
-			if char in self._cTbMap.keys():
-				self._cTbMap[char] += '0'
+			if char in self._cMap.keys():
+				self._cMap[char] += '0'
 			else:
-				self._cTbMap[char] = '0'
+				self._cMap[char] = '0'
 		self._buildMapRecursive(node.left)
 		for char in node.right.chars:
-			if char in self._cTbMap.keys():
-				self._cTbMap[char] += '1'
+			if char in self._cMap.keys():
+				self._cMap[char] += '1'
 			else:
-				self._cTbMap[char] = '1'
+				self._cMap[char] = '1'
 		self._buildMapRecursive(node.right)
 
 	def _buildBitString(self):
 		for char in self._string:
-			self._bitString += self._cTbMap[char]
+			self._bitString += self._cMap[char]
 
 
 def runTests(testString):
 	# runs basic functionality checks
 	HC = HuffmanCodes()
-	assert HC.decode("01", {"0":"h", "1":"i"}) == "hi"
-	assert HC.decode("0110000011", {"00":"l", "01":"h", "10":"e", "11":"o"}) \
+	assert HC.decode("01", {"h":"0", "i":"1"}) == "hi"
+	assert HC.decode("0110000011", {"l":"00", "h":"01", "e":"10", "o":"11"}) \
 		== "hello"
 	HC.encode("hello!")
 	for node in HC._tree:
@@ -166,20 +158,20 @@ def runTests(testString):
 
 	# outputs example details when encoding run on testString
 	HC.encode(testString)
-	print("Original String: \"%s\"\n" % HC.getString())
-	print("Huffman BitString: %s\n" % HC.getBitString())
+	print("Original String: \"%s\"\n" % HC.string)
+	print("Huffman BitString: %s\n" % HC.bitString)
 
 	asciiBitString = bin(int.from_bytes(testString.encode(), 'big'))[2:]
 	print("ASCII BitString: %s\n" % asciiBitString)
 
-	huffmanBitLen = len(HC.getBitString())
+	huffmanBitLen = len(HC.bitString)
 	asciiBitLen = len(asciiBitString)
 	ratio = asciiBitLen / huffmanBitLen
 	print("Huffman Length: %d, ASCII Length: %d, Compression: %0.1fx\n" 
 		% (huffmanBitLen, asciiBitLen, ratio))
 
-	print("Char to Bits Map: %s\n" % str(HC.getCharToBitsMap()))
-	print("Char Frequency Map: %s\n" % str(HC.getFreqMap()))
-	assert testString == HC.decode(HC.getBitString(), HC.getBitsToCharMap())
+	print("Char to Bits Map: %s\n" % str(HC.charToBitsMap))
+	print("Char Frequency Map: %s\n" % str(HC.freqMap))
+	assert testString == HC.decode(HC.bitString, HC.charToBitsMap)
 
 runTests("Testing 123!")
