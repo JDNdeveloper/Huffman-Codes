@@ -22,6 +22,8 @@ change the text to be encoded.
 
 To run the Python code, execute `src/Python/HuffmanCodes.py`.
 
+C++, Go, and Haskell implementations are on their way!
+
 Enjoy!
 
 **Jayden Navarro**
