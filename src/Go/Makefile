@@ -1,3 +1,6 @@
+# Author: Jayden Navarro
+# Date: 1-15-2016
+# Class: CMPS 112
 GO     = go build -o ${EXE}
 GO_SRC = main.go
 EXE    = huffman.exe
