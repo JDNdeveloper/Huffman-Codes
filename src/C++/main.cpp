@@ -25,10 +25,10 @@ int main(int argc, char** argv) {
    parse_args(argc, argv);
    generate_file_names();
 
-   printf("opt_encode: %d\nopt_decode: %d\n"
-          "enc_file_name: %s\ndec_file_name: %s\n",
-          opt_encode, opt_decode, enc_file_name.c_str(),
-          dec_file_name.c_str());
+   //printf("opt_encode: %d\nopt_decode: %d\n"
+   //       "enc_file_name: %s\ndec_file_name: %s\n",
+   //       opt_encode, opt_decode, enc_file_name.c_str(),
+   //       dec_file_name.c_str());
 
    Huffman hc(enc_file_name, dec_file_name);
    if (opt_encode) {
@@ -63,7 +63,7 @@ void parse_args(int argc, char** argv) {
       }
    }
    if (optind < 3 || argc < 3 || optind > 3 || argc > 3) {
-      std::cerr << "Improper Usage" << std::endl;
+      std::cerr << "Error: Improper Usage" << std::endl;
       error = true;
    }
    if (opt_decode) {
@@ -75,7 +75,7 @@ void parse_args(int argc, char** argv) {
           not_hc = true;
        }
        if (not_hc) {
-          std::cerr << "Filename is not of type filename.hc"
+          std::cerr << "Error: Filename is not of type filename.hc"
                     << std::endl;
           error = true;
        }

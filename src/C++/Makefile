@@ -16,7 +16,7 @@ ${EXE} : ${C_SRC} ${H_SRC} ${O_FLS}
 	${GPP} -c $<
 
 clean :
-	- rm *~ *.o
+	- rm *~ *.o *.hc
 
 spotless : clean
 	- rm ${EXE}
