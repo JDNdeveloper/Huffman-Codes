@@ -71,11 +71,11 @@ void parse_args(int argc, char** argv) {
        size_t dotloc = enc_file_name.find_last_of(".");
        if (dotloc == std::string::npos) {
           not_hc = true;
-       } else if (enc_file_name.substr(dotloc ) != ".hc") {
+       } else if (enc_file_name.substr(dotloc ) != ".enc") {
           not_hc = true;
        }
        if (not_hc) {
-          std::cerr << "Error: Filename is not of type filename.hc"
+          std::cerr << "Error: Filename is not of type filename.enc"
                     << std::endl;
           error = true;
        }
@@ -90,9 +90,10 @@ void parse_args(int argc, char** argv) {
 
 void generate_file_names() {
    if (opt_encode) {
-      enc_file_name = dec_file_name + ".hc";
+      enc_file_name = dec_file_name + ".enc";
    } else if (opt_decode) {
       size_t dotloc = enc_file_name.find_last_of(".");
-      dec_file_name = enc_file_name.substr(0, dotloc);      
+      dec_file_name = enc_file_name.substr(0, dotloc);
+      dec_file_name += ".dec";
    }
 }

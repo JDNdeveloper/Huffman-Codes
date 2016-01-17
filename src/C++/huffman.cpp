@@ -99,12 +99,15 @@ void Huffman::build_map() {
       char_map[i] = "";
    }
    build_map_recursive(tree.top());
-   
+
+   /*
    for (unsigned int i = 0; i < 256; i++) {
       if (char_map[i] != "")
          std::cout << (unsigned char) i << ": "
                    << char_map[i] << std::endl;
    }
+   */
+   
    
 }
 
@@ -122,26 +125,15 @@ void Huffman::build_map_recursive(Node *n) {
 }
 
 void Huffman::build_enc_buffer() {
-   union {
-      unsigned long long count;
-      unsigned char bytes[8];
-   } Count;
-   Count.count = 0;
-   //save 64 bits for the bit count
-   for (unsigned int i = 0; i < 8; i++) {
-      enc_buffer.push_back(0);
-   }
-   for (unsigned char c : dec_buffer) {
-      for (unsigned char d : char_map[c]) {
-         //enc_buffer.push_back(d);
-         Count.count++;
-      }
-   }
-   //put in the bit count
-   for (unsigned int i = 0; i < 8; i++) {
-      enc_buffer[i] = Count.bytes[7-i];
-   }
-   std::cout << Count.count << std::endl;
+   // Save room for the last valid bits info.
+   // This will say what bits are non-junk
+   // from the last byte of the file.
+   enc_buffer.push_back(0);
+
+   build_enc_map();
+   build_enc_rep();
+   
+   //std::cout << Count.count << std::endl;
    /*
    for (unsigned char c : enc_buffer) {
       std::cout << (unsigned int) c << std::endl;
@@ -149,10 +141,155 @@ void Huffman::build_enc_buffer() {
    */
 }
 
-void Huffman::huffman_decode() {
-   dec_buffer = enc_buffer; //REMOVE
+void Huffman::build_enc_map() {
+   for (unsigned int i = 0; i < 256; i++) {
+      //char is implied by ordering from 0 to 255
+      //of the mapping, no need to waste a byte
+      //to include this
+      
+      std::string bitstring_rep = char_map[i];
+      //says how many bits are valid of following
+      //bytestream that stores the bitstring rep
+      enc_buffer.push_back(bitstring_rep.length());
 
-   
+      std::string bitstring = "";
+      unsigned int count_eight = 0;
+      for (unsigned char bit : bitstring_rep) {
+         bitstring += bit;
+         count_eight++;
+         if (count_eight == 8) {
+            enc_buffer.
+               push_back(bitstring_to_char(bitstring));
+            bitstring = "";
+            count_eight = 0;
+         }
+      }
+      
+      //pushes last byte of bistring rep onto file
+      if (count_eight != 0) {
+         enc_buffer.push_back(bitstring_to_char(bitstring));
+      }      
+   }
+}
+
+void Huffman::build_enc_rep() {
+   unsigned int count_eight = 0;
+   std::string bitstring = "";
+   for (unsigned char c : dec_buffer) {
+      std::string bitstring_rep = char_map[c];
+      for (unsigned char bit : bitstring_rep) {
+         //enc_buffer.push_back(d);
+         bitstring += bit;
+         count_eight++;
+         if (count_eight == 8) {
+            enc_buffer.
+               push_back(bitstring_to_char(bitstring));
+            bitstring = "";
+            count_eight = 0;
+         }
+      }
+   }
+
+   //pushes last byte onto file, and saves how many
+   //bits of that last byte are valid into the first
+   //byte of the file.
+   if (count_eight != 0) {
+      enc_buffer.push_back(bitstring_to_char(bitstring));
+      enc_buffer[0] = count_eight;
+   } else {
+      // if none leftover, all 8 bits of last byte are
+      // valid.
+      enc_buffer[0] = 8;
+   }
+   /*
+   std::cout << "1: "
+             << (unsigned int)
+      bitstring_to_char("00100100")
+             << std::endl;
+   */
+}
+
+unsigned char Huffman::bitstring_to_char(std::string s) {
+   while (s.length() < 8) {
+      s += '0';
+   }
+   unsigned char c = 0;
+   for (unsigned int i = 0; i < 8; i++) {
+      if (s[7 - i] - '0' == 1) {
+         c |= 1 << i;
+      }
+   }
+   return c;
+}
+
+void Huffman::huffman_decode() {
+   auto iter = enc_buffer.begin();
+   unsigned int last_byte_valid = *iter;
+   iter++;
+
+   build_dec_map(iter);
+   build_dec_buffer(iter, last_byte_valid);
+}
+
+void Huffman::build_dec_map(char_vect::iterator &iter) {
+   for (unsigned int i = 0; i < 256; i++) {
+      unsigned int valid_bits = *iter;
+      iter++;
+      std::string bitstring_rep = "";
+      unsigned int bit_count = 0;
+      while (bit_count < valid_bits) {
+         unsigned char data = *iter;
+         std::string byte = char_to_bitstring(data);
+         for (unsigned char c : byte) {
+            if (bit_count < valid_bits) {
+               bitstring_rep += c;
+               bit_count++;
+            }
+         }
+         iter++;
+      }
+      stc_entry entry(bitstring_rep, i);
+      bits_map.insert(entry);
+   }
+}
+
+void Huffman::build_dec_buffer(char_vect::iterator &iter,
+                               unsigned int
+                               last_byte_valid) {
+   //std::cout << " : "
+   //          << char_to_bitstring(' ') << std::endl;
+
+   std::string bits_partial = "";
+   for (; iter != enc_buffer.end(); iter++) {
+      std::string bitstring = char_to_bitstring(*iter);
+      // default process all 8 bits of the byte
+      unsigned int bits_to_process = 8;
+      // if this is the last byte, only process the
+      // valid bits (num stored in first byte of file)
+      if (iter + 1 == enc_buffer.end())
+         bits_to_process = last_byte_valid;
+      for (unsigned int i = 0; i < bits_to_process;
+           i++) {
+         bits_partial += bitstring[i];
+         auto match = bits_map.find(bits_partial);
+         if (match != bits_map.end()) {
+            dec_buffer.push_back(bits_map[bits_partial]);
+            bits_partial = "";
+         }
+      }
+   }
+}
+
+std::string Huffman::char_to_bitstring(unsigned char c) {
+   std::string s = "XXXXXXXX";
+   for (unsigned int i = 0; i < 8; i++) {
+      if ((c & (1 << i)) == 0) {
+         s[7 - i] = '0';
+      } else {
+         s[7 - i] = '1';
+      }
+   }
+   return s;
 }
 
 void Huffman::read_in(std::string in_file_name,
