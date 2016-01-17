@@ -12,6 +12,9 @@
 bool opt_encode = false;
 bool opt_decode = false;
 
+std::string enc_ext = ".h_enc";
+std::string dec_ext = ".h_dec";
+
 //stores filename of encoded file
 std::string enc_file_name = "";
 
@@ -71,12 +74,12 @@ void parse_args(int argc, char** argv) {
        size_t dotloc = enc_file_name.find_last_of(".");
        if (dotloc == std::string::npos) {
           not_hc = true;
-       } else if (enc_file_name.substr(dotloc ) != ".enc") {
+       } else if (enc_file_name.substr(dotloc ) != enc_ext) {
           not_hc = true;
        }
        if (not_hc) {
-          std::cerr << "Error: Filename is not of type filename.enc"
-                    << std::endl;
+          std::cerr << "Error: Filename is not of type filename"
+                    << enc_ext << std::endl;
           error = true;
        }
    }
@@ -90,10 +93,10 @@ void parse_args(int argc, char** argv) {
 
 void generate_file_names() {
    if (opt_encode) {
-      enc_file_name = dec_file_name + ".enc";
+      enc_file_name = dec_file_name + enc_ext;
    } else if (opt_decode) {
       size_t dotloc = enc_file_name.find_last_of(".");
       dec_file_name = enc_file_name.substr(0, dotloc);
-      dec_file_name += ".dec";
+      dec_file_name += dec_ext;
    }
 }
