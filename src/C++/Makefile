@@ -19,10 +19,9 @@ check : spotless ${EXE}
 	./huffman.exe -e huffman.o
 	./huffman -d huffman.o.h_enc
 	diff huffman.o huffman.o.h_dec
-	make clean
 
 clean :
 	@ rm *~ *.o *.h_enc *.h_dec ||:
 
 spotless : clean
-	- rm ${EXE}
+	@ rm ${EXE} ||:
