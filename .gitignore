@@ -1,6 +1,8 @@
 *.class
 *.o
 *.exe
+*.h_dec
+*.h_enc
 
 # Package Files #
 *.jar
