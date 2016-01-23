@@ -11,7 +11,7 @@ Huffman Codes
 
 **Google+:** [Jayden Navarro](https://plus.google.com/u/0/+JaydenNavarro/posts)
 
-**GitHub:** [Jayden Navarro](http://www.github.com/JDNdeveloper)
+**GitHub:** [JDNdeveloper](http://www.github.com/JDNdeveloper)
 
 ## Description:
 Provides Huffman Coder and Decoder written in Java, Python, and C++. To run the Java code, just 
