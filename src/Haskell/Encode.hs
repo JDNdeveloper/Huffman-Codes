@@ -42,23 +42,6 @@ instance Ord HuffmanTree where
   HuffmanLeaf (x,_) <= HuffmanLeaf (y,_) = x <= y
   HuffmanNode (x,_) _ _ <= HuffmanNode (y,_) _ _ = x <= y
 
--- Temp testing variables below
-s = "Hello"
-m = buildFreqMap s
-ll = buildLeafList m
-t = buildHuffmanTree m
-cm = buildCharMap t
-bs = buildBitString cm s
-
-leaf1 = HuffmanLeaf (1,'0')
-leaf2 = HuffmanLeaf (2,'1')
-
-node1 = HuffmanNode (3,['0']) leaf2 leaf1
-node2 = HuffmanNode (2,['0']) leaf1 leaf2
-
-treeList = [leaf1, node1, leaf2, node2]
--- End of temp testing variables
-
 -- Build the Frequency Map
 buildFreqMap :: String -> FreqMap
 buildFreqMap s = combineDups [ (1,c) | c <- s ]
