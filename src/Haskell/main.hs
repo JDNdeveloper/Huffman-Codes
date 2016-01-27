@@ -6,22 +6,42 @@ import Decode
 
 main = putStrLn mainOutputString
 
-encodeInput = "Hello World!"
-
-decodeInput = "011000"
-decodeMap = [('H',"01"),('i',"10"),('!',"00")]
-
 mainOutputString = encodePrompt ++ "\n\n" ++ decodePrompt
 
-encodePrompt = "String to encode: " ++ encodeInput ++
-               "\nMap: " ++ theMap ++
-               "\nEncoded string: " ++ theString
+encodePrompt = "-- ENCODE EXAMPLE --" ++
+               "\n-> Inputs" ++
+               "\nString to encode: " ++ rawInput ++
+               "\n-> Outputs" ++
+               "\nMap: " ++ show charMap ++
+               "\nBitstring: " ++ bitString ++
+               "\n-> Reversing operation..." ++
+               "\nDecoded string: " ++ decodedString
   where
-    theMap = show $ snd theEncoding
-    theString = fst theEncoding
-    theEncoding = encode encodeInput
+    -- raw data
+    rawInput = "Hello World!"
+    -- constructed data (encoding)
+    encodeObj = encode rawInput
+    charMap = snd encodeObj
+    bitString = fst encodeObj
+    -- reversing the operation...(decoding)
+    decodedString = decode bitString charMap
     
-decodePrompt = "Bitstring to decode: " ++ decodeInput ++
-               "\nMap: " ++ show decodeMap ++
-               "\nDecoded bitstring: " ++
-               decode decodeInput decodeMap
+decodePrompt = "-- DECODE EXAMPLE --" ++
+               "\n-> Inputs" ++
+               "\nInitial Map: " ++ show rawCharMap ++
+               "\nBitstring to decode: " ++ rawBitString ++
+               "\n-> Outputs" ++
+               "\nDecoded string: " ++ decodedString ++
+               "\n-> Reversing operation..." ++
+               "\nMap: " ++ show charMap ++
+               "\nBitString: " ++ bitString
+  where
+    -- raw data
+    rawBitString = "01001"
+    rawCharMap = [('H',"01"),('i',"00"),('!',"1")]
+    -- constructed data (decoding)
+    decodedString = decode rawBitString rawCharMap
+    -- reversing the operation...(encoding)
+    encodeObj = encode decodedString
+    charMap = snd encodeObj
+    bitString = fst encodeObj

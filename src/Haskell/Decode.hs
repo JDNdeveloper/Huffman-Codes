@@ -39,4 +39,4 @@ fstBitString' x s cm
     m = Map.fromList $ invertMap cm
 
 invertMap :: [(a,b)] -> [(b,a)]
-invertMap m = [ (y,x) | (x,y) <- m ] 
+invertMap m = [ (y,x) | (x,y) <- m ]
