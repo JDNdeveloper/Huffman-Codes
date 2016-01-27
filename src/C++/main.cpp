@@ -28,11 +28,6 @@ int main(int argc, char** argv) {
    parse_args(argc, argv);
    generate_file_names();
 
-   //printf("opt_encode: %d\nopt_decode: %d\n"
-   //       "enc_file_name: %s\ndec_file_name: %s\n",
-   //       opt_encode, opt_decode, enc_file_name.c_str(),
-   //       dec_file_name.c_str());
-
    Huffman hc(enc_file_name, dec_file_name);
    if (opt_encode) {
       hc.encode();

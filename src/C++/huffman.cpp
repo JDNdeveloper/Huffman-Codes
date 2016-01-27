@@ -15,20 +15,12 @@ Huffman::Huffman(std::string enc_name,
 }
 
 void Huffman::encode() {
-   //std::cout << "Encoding " << dec_file_name << std::endl;
-   //std::cout << "Resulting encoded file will be located in "
-   //          << enc_file_name << std::endl;
-
    read_in(dec_file_name, dec_buffer);
    huffman_encode();
    print_out(enc_file_name, enc_buffer);
 }
 
 void Huffman::decode() {
-   //std::cout << "Decoding " << enc_file_name << std::endl;
-   //std::cout << "Resulting decoded file will be located in "
-   //          << dec_file_name << std::endl;
-   
    read_in(enc_file_name, enc_buffer);
    huffman_decode();
    print_out(dec_file_name, dec_buffer);
@@ -46,15 +38,8 @@ void Huffman::calc_freq() {
       freq_map[i] = 0;
    }
    for (unsigned char c : dec_buffer) {
-      //std::cout << c << " ";
       freq_map[c]++;
    }
-   /*
-   for (int i = 0; i < 256; i++) {
-      std::cout << i << ": " << freq_map[i]
-                << std::endl;
-   }
-   */  
 }
 
 void Huffman::build_tree() {
@@ -83,14 +68,6 @@ void Huffman::build_tree() {
       a_b->left = b;
       tree.push(a_b);
    }
-   
-   /*
-   while (tree.size() > 0) {
-      Node* n = tree.top(); tree.pop();
-      std::cout << n->freq << ", "
-                << n->chars[0] << std::endl;
-   }
-   */
 }
 
 void Huffman::build_map() {
@@ -99,16 +76,6 @@ void Huffman::build_map() {
       char_map[i] = "";
    }
    build_map_recursive(tree.top());
-
-   /*
-   for (unsigned int i = 0; i < 256; i++) {
-      if (char_map[i] != "")
-         std::cout << (unsigned char) i << ": "
-                   << char_map[i] << std::endl;
-   }
-   */
-   
-   
 }
 
 void Huffman::build_map_recursive(Node *n) {
@@ -132,20 +99,14 @@ void Huffman::build_enc_buffer() {
 
    build_enc_map();
    build_enc_rep();
-   
-   //std::cout << Count.count << std::endl;
-   /*
-   for (unsigned char c : enc_buffer) {
-      std::cout << (unsigned int) c << std::endl;
-   }
-   */
 }
 
 void Huffman::build_enc_map() {
    for (unsigned int i = 0; i < 256; i++) {
-      //char is implied by ordering from 0 to 255
+      //the char is implied by ordering from 0 to 255
       //of the mapping, no need to waste a byte
-      //to include this
+      //to include which char we're providing the map
+      //for
       
       std::string bitstring_rep = char_map[i];
       //says how many bits are valid of following
@@ -178,7 +139,6 @@ void Huffman::build_enc_rep() {
    for (unsigned char c : dec_buffer) {
       std::string bitstring_rep = char_map[c];
       for (unsigned char bit : bitstring_rep) {
-         //enc_buffer.push_back(d);
          bitstring += bit;
          count_eight++;
          if (count_eight == 8) {
@@ -201,12 +161,6 @@ void Huffman::build_enc_rep() {
       // valid.
       enc_buffer[0] = 8;
    }
-   /*
-   std::cout << "1: "
-             << (unsigned int)
-      bitstring_to_char("00100100")
-             << std::endl;
-   */
 }
 
 unsigned char Huffman::bitstring_to_char(std::string s) {
@@ -256,9 +210,6 @@ void Huffman::build_dec_map(char_vect::iterator &iter) {
 void Huffman::build_dec_buffer(char_vect::iterator &iter,
                                unsigned int
                                last_byte_valid) {
-   //std::cout << " : "
-   //          << char_to_bitstring(' ') << std::endl;
-
    std::string bits_partial = "";
    for (; iter != enc_buffer.end(); iter++) {
       std::string bitstring = char_to_bitstring(*iter);
