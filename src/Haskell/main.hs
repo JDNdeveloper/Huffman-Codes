@@ -6,7 +6,7 @@ import Decode
 
 main = do
   putStrLn encodePrompt
-  putStr "\n"
+  putChar '\n'
   putStrLn decodePrompt
 
 encodePrompt = "-- ENCODE EXAMPLE --" ++
