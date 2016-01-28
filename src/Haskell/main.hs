@@ -4,9 +4,10 @@
 import Encode
 import Decode
 
-main = putStrLn mainOutputString
-
-mainOutputString = encodePrompt ++ "\n\n" ++ decodePrompt
+main = do
+  putStrLn encodePrompt
+  putStr "\n"
+  putStrLn decodePrompt
 
 encodePrompt = "-- ENCODE EXAMPLE --" ++
                "\n-> Inputs" ++
