@@ -5,18 +5,19 @@ import Encode
 import Decode
 
 main = do
-  putStrLn encodePrompt
+  encodeOutput
   putChar '\n'
-  putStrLn decodePrompt
+  decodeOutput
 
-encodePrompt = "-- ENCODE EXAMPLE --" ++
-               "\n-> Inputs" ++
-               "\nString to encode: " ++ rawInput ++
-               "\n-> Outputs" ++
-               "\nMap: " ++ show charMap ++
-               "\nBitstring: " ++ bitString ++
-               "\n-> Reversing operation..." ++
-               "\nDecoded string: " ++ decodedString
+encodeOutput = do
+  putStrLn "-- ENCODE EXAMPLE --"
+  putStrLn "-> Inputs"
+  putStrLn $ "String to encode: " ++ rawInput
+  putStrLn "-> Outputs"
+  putStrLn $ "Map: " ++ show charMap
+  putStrLn $ "Bitstring: " ++ bitString
+  putStrLn "-> Reversing operation..."
+  putStrLn $ "Decoded string: " ++ decodedString
   where
     -- raw data
     rawInput = "Hello World!"
@@ -27,15 +28,16 @@ encodePrompt = "-- ENCODE EXAMPLE --" ++
     -- reversing the operation...(decoding)
     decodedString = decode bitString charMap
     
-decodePrompt = "-- DECODE EXAMPLE --" ++
-               "\n-> Inputs" ++
-               "\nInitial Map: " ++ show rawCharMap ++
-               "\nBitstring to decode: " ++ rawBitString ++
-               "\n-> Outputs" ++
-               "\nDecoded string: " ++ decodedString ++
-               "\n-> Reversing operation..." ++
-               "\nMap: " ++ show charMap ++
-               "\nBitString: " ++ bitString
+decodeOutput = do
+  putStrLn "-- DECODE EXAMPLE --"
+  putStrLn "-> Inputs"
+  putStrLn $ "Initial Map: " ++ show rawCharMap
+  putStrLn $ "Bitstring to decode: " ++ rawBitString
+  putStrLn "-> Outputs"
+  putStrLn $ "Decoded string: " ++ decodedString
+  putStrLn "-> Reversing operation..."
+  putStrLn $ "Map: " ++ show charMap
+  putStrLn $ "BitString: " ++ bitString
   where
     -- raw data
     rawBitString = "01001"
