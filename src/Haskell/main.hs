@@ -39,7 +39,7 @@ decodeOutput = do
   putStrLn $ "Decoded string: " ++ decodedString
   putStrLn "-> Reversing operation..."
   putStrLn $ "Map: " ++ show charMap
-  putStrLn $ "BitString: " ++ bitString
+  putStrLn $ "Bitstring: " ++ bitString
   where
     -- raw data
     rawBitString = "01001"
