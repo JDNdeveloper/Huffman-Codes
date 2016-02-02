@@ -4,5 +4,5 @@
 package huffman
 
 func Encode(s string) (string, map[byte]string) {
-  return "01010", map[byte]string { 'a': "01", 'b': "0", }
+  return "01011", map[byte]string { 'a': "01", 'b': "1", }
 }
