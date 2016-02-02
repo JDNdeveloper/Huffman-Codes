@@ -12,7 +12,7 @@ ${EXE} : ${GO_SRC} ${GO_EXTRA_SRC}
 	${GO} ${GO_SRC}
 
 clean :
-	- rm *~
+	- rm *~ ./*/*~
 
 spotless : clean
 	- rm -r ${EXE}
