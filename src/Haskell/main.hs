@@ -5,6 +5,8 @@ import Encode
 import Decode
 
 main = do
+  putStrLn "Huffman Codes in Haskell"
+  putChar '\n'
   encodeOutput
   putChar '\n'
   decodeOutput
