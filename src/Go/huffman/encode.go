@@ -3,8 +3,6 @@
 // Class: CMPS 112
 package huffman
 
-import "fmt"
-
 type node struct {
   left *node
   right *node
@@ -15,30 +13,11 @@ type node struct {
 func Encode(s string) (string, map[byte]string) {
   freqMap := calcFreq(s)
   cNode := buildTree(freqMap)
-
-  printTree(cNode)
-  
   charMap := make(map[byte]string)
-
-  
-  
   pCharMap := &charMap
   buildMap(cNode, pCharMap)
   bitString := buildBitString(s, charMap)
   return bitString, charMap
-}
-
-func printTree(cNode *node) {
-  if cNode == nil {
-    return
-  }
-  fmt.Printf("%d: ", cNode.freq)
-  for _, char := range cNode.chars {
-    fmt.Printf("%c ", char)
-  }
-  fmt.Println();
-  printTree(cNode.left)
-  printTree(cNode.right)
 }
 
 func calcFreq(s string) map[byte]int {
@@ -100,7 +79,6 @@ func buildMap(cNode *node, charMap *map[byte]string) {
   }
   for _, char := range cNode.left.chars {
     _, ok := (*charMap)[char]
-    fmt.Printf("Adding zero to %c\n", char)
     if ok {
       (*charMap)[char] += "0"
     } else {
@@ -110,7 +88,6 @@ func buildMap(cNode *node, charMap *map[byte]string) {
   buildMap(cNode.left, charMap)
   for _, char := range cNode.right.chars {
     _, ok := (*charMap)[char]
-    fmt.Printf("Adding one to %c\n", char)
     if ok {
       (*charMap)[char] += "1"
     } else {
