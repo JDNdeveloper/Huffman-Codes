@@ -11,6 +11,8 @@ import qualified Data.Maybe as Maybe
 
 import HuffmanTypes
 
+-- Takes in a bit string and a character to bit string
+-- map and returns the decoded string
 decode :: BitString -> CharMap -> String
 decode "" cm = ""
 decode s cm = fbs ++ decode rem cm
@@ -19,9 +21,15 @@ decode s cm = fbs ++ decode rem cm
     fbs = fst $ fbsRem
     rem = snd $ fbsRem
 
+-- Builds a partition of a string by returning the
+-- first x characters and the last x characters in
+-- a tuple
 buildPartition :: Int -> String -> (String, String)
 buildPartition x s = (take x s, drop x s)
 
+-- Given a string and a character to bit string map,
+-- the first decoded sequence of the bit string is returned,
+-- along with the remaining part of the bit string
 fstBitString :: String -> CharMap -> (BitString, String)
 fstBitString = fstBitString' 1
 
@@ -38,5 +46,6 @@ fstBitString' x s cm
     result = Map.lookup fstPart m
     m = Map.fromList $ invertMap cm
 
+-- Reverses the key value pairing in a map
 invertMap :: [(a,b)] -> [(b,a)]
 invertMap m = [ (y,x) | (x,y) <- m ]
