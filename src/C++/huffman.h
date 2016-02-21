@@ -11,6 +11,8 @@
 
 using char_vect = std::vector<unsigned char>;
 
+// Used to represent a Huffman node. Stores a
+// vector of characters along with their frequency.
 class Node {
    friend class Huffman;
  public:
@@ -25,6 +27,7 @@ class Node {
    int freq;
 };
 
+// Provides comparison operators between two nodes.
 class CompareNodes {
  public:
    bool operator()(const Node* a, const Node* b) {
