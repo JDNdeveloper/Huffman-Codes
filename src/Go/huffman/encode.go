@@ -3,6 +3,8 @@
 // Class: CMPS 112
 package huffman
 
+// Used to represent a Huffman node, which contains a list 
+// of characters along with the frequency of those characters
 type node struct {
   left *node
   right *node
@@ -10,6 +12,8 @@ type node struct {
   freq int
 }
 
+// Takes in a string and returns the byte to string map, along
+// with the corresponding bit string
 func Encode(s string) (string, map[byte]string) {
   freqMap := calcFreq(s)
   cNode := buildTree(freqMap)
@@ -20,6 +24,7 @@ func Encode(s string) (string, map[byte]string) {
   return bitString, charMap
 }
 
+// Calcualtes the character frequency of the string
 func calcFreq(s string) map[byte]int {
   freqMap := make(map[byte]int)
   for _, c := range s {
@@ -33,6 +38,8 @@ func calcFreq(s string) map[byte]int {
   return freqMap
 }
 
+// Builds the Huffman Tree used to find the binary
+// representation of characters
 func buildTree(freqMap map[byte]int) *node {
   var nodeList []*node
   for char, freq := range freqMap {
@@ -55,6 +62,7 @@ func buildTree(freqMap map[byte]int) *node {
   return nodeList[0]
 }
 
+// Returns the smallest node from a slice
 func getSmallestNode(nodeList []*node) (*node, []*node) {
   var newNodeList []*node
   smallNode := &node{nil, nil, nil, 0}
@@ -72,7 +80,9 @@ func getSmallestNode(nodeList []*node) (*node, []*node) {
   return smallNode, newNodeList
 }
 
-
+// Given the Huffman Tree, a byte to string map is returned
+// which contains a mapping from each character to its
+// binary representation
 func buildMap(cNode *node, charMap *map[byte]string) {  
   if cNode.left == nil || cNode.right == nil {
     return
@@ -97,6 +107,8 @@ func buildMap(cNode *node, charMap *map[byte]string) {
   buildMap(cNode.right, charMap)
 }
 
+// Given a string and a byte (char) to string map,
+// the encoded bit string is returned
 func buildBitString(s string,
   charMap map[byte]string) string {
   bitString := ""

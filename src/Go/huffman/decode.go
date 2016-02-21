@@ -3,6 +3,7 @@
 // Class: CMPS 112
 package huffman
 
+// Takes in a bit string and a byte to string map, and decodes it
 func Decode(bitString string, mbs map[byte]string) string {
   decodedString := ""
   builder := ""
@@ -18,6 +19,7 @@ func Decode(bitString string, mbs map[byte]string) string {
   return decodedString
 }
 
+// Turns a byte to string map into a string to byte map
 func reverseMap(mbs map[byte]string) map[string]byte {
   msb := make(map[string]byte)
   for b, s := range mbs {
