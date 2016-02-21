@@ -26,6 +26,7 @@ data HuffmanTree = HuffmanNode (Int,[Char])
                  | HuffmanLeaf (Int,Char)
                  deriving (Show,Eq)
 
+-- Combines two trees together
 treeAdd :: HuffmanTree -> HuffmanTree -> HuffmanTree
 t1@(HuffmanLeaf (x,u)) `treeAdd` t2@(HuffmanLeaf (y,v)) =
   HuffmanNode (x+y,[u,v]) t1 t2
