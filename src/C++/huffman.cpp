@@ -7,6 +7,9 @@
 
 #include "huffman.h"
 
+// Function comments can be found in the
+// header file
+
 Huffman::Huffman(std::string enc_name,
                  std::string dec_name) {
    enc_file_name = enc_name;
